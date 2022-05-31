@@ -73,7 +73,7 @@ def total():
         while key != None:
             n +=1
             key = key.pointer
-    print('the total number of students is ' +str(n))
+    return n
     
 htable = [None for i in range(10)] 
 while True:
@@ -83,10 +83,13 @@ n for total number of students and q to quit : ')
         insert(int(input('enter the roll number of new student : ')),input('\
 enter the name of new student : '))
     elif inp =='d':
-        delete(int(input('enter the roll number of student to delete : ')))
+        if 0 == total():
+            print('Record is empty')
+        else:
+            delete(int(input('enter the roll number of student to delete : ')))
     elif inp =='s':
         query(int(input('enter the roll number of student to search : ')))
     elif inp =='n':
-        total()
+        print('the total number of students is ' +str(total()))
     elif inp =='q':
         break
