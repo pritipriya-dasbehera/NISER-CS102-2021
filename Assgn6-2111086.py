@@ -1,5 +1,5 @@
 class Node():
-  '''Node structure for tree with left, right and value attributes'''
+  '''Node structure for tree with left right and value attributes'''
   def __init__(self,val):
     self.val = val
     self.lt = None
@@ -104,41 +104,37 @@ class tree():
     crt = self.head
     if crt == None:
       return 'The tree is empty!'
-    lnear = crt.val #nearest value to the left
-    rnear = crt.val #nearest value to the right
+    temp = crt.val
     while True:
       if val == crt.val:
         return 'The value '+str(val)+' exists in the tree!'
 
       elif val > crt.val:
-        lnear = crt.val
-        if prev.rt != None:
-          rnear, tempprev = prev.rt.min(prev)
-        else:
-          rnear = prev.val
         if crt.rt == None:
-          if rnear-val > val-lnear:
-            temp = lnear
-          else:
-            temp = rnear
           return 'The value '+str(val)+' does not exist in the tree! '+str(temp)+' is the closest element to it in the tree'
+        
+        rn, unnecessary = crt.rt.min(prev)
+        rmin = rn.val
+        if abs(rmin - val) > abs(temp-val):
+          pass
+        else:
+          temp = rmin
         prev = crt
         crt = crt.rt
 
       elif val < crt.val:
-        rnear = crt.val
-        if prev.lt != None:
-          lnear, tempprev = prev.lt.max(prev)
-        else:
-          lnear = prev.val
         if crt.lt == None:
-          if rnear-val > val-lnear:
-            temp = lnear
-          else:
-            temp = rnear
           return 'The value '+str(val)+' does not exist in the tree! '+str(temp)+' is the closest element to it in the tree'
+
+        ln, unnecessary = crt.lt.max(prev)
+        lmax = ln.val
+
+        if abs(lmax - val) > abs(temp-val):
+          pass
+        else:
+          temp = lmax
         prev = crt
-        crt = crt.lt
+        crt = crt.rt
 
   def rem(self,val):
     '''removes the node with the value and reorders tree as required'''
@@ -202,7 +198,6 @@ class tree():
         flag = 'l'
 
 
-#below code runs during execution
 btree = tree()
 while True:
   print('\n \n press a to add, s to search, rs to range search, r to remove, q to quit. ')
