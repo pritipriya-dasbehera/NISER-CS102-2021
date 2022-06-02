@@ -25,16 +25,11 @@ class Node():
 
   def succ(self,prev):
     '''returns the node with least value larger than the given node, along with parent and direction'''
-    if self.rt != None:
-      crt, prev = self.rt.min(prev)
-      if self.rt.val == crt.val:
-        return crt, prev, 'r'
-      else:
-        return crt, prev, 'l'
-    else:
-      #the below code is wrong but is never used so doesn't matter :)
-      crt, prev = self.max()
+    crt, prev = self.rt.min(prev)
+    if self.rt.val == crt.val:
       return crt, prev, 'r'
+    else:
+      return crt, prev, 'l'
 
   def retall(self,ret):
     '''appends all the nodes below a parent into the input list'''
@@ -49,9 +44,9 @@ class Node():
     val = self.val
     if a <= val and val <= b:
       ret.append(val)
-    if self.lt != None and self.lt.val >= a:
+    if self.lt != None:
       self.lt.findall(a,b,ret)
-    if self.rt != None and self.rt.val <= b:
+    if self.rt != None:
       self.rt.findall(a,b,ret)
 
   def __str__(self):
@@ -70,8 +65,8 @@ class Node():
     if self.rt != None:
       ret += ')  ('+str(self.rt)
     return ret
-
-
+    
+    
 class tree():
   '''primary tree data-structure'''
   def __init__(self):
@@ -99,12 +94,12 @@ class tree():
         crt = crt.lt
   
   def search(self,val):
-    '''returns string on presence/ closest element to the input '''
-    prev = self.head
+    '''returns string on presence/closest element to the input '''
     crt = self.head
     if crt == None:
       return 'The tree is empty!'
     temp = crt.val
+
     while True:
       if val == crt.val:
         return 'The value '+str(val)+' exists in the tree!'
@@ -113,12 +108,10 @@ class tree():
         if crt.rt == None:
           return 'The value '+str(val)+' does not exist in the tree! '+str(temp)+' is the closest element to it in the tree'
         
-        rn, unnecessary = crt.rt.min(prev)
-        rmin = rn.val
-        if abs(rmin - val) > abs(temp-val):
+        if abs(crt.rt.val - val) > abs(temp-val):
           pass
         else:
-          temp = rmin
+          temp = crt.rt.val
         prev = crt
         crt = crt.rt
 
@@ -126,15 +119,12 @@ class tree():
         if crt.lt == None:
           return 'The value '+str(val)+' does not exist in the tree! '+str(temp)+' is the closest element to it in the tree'
 
-        ln, unnecessary = crt.lt.max(prev)
-        lmax = ln.val
-
-        if abs(lmax - val) > abs(temp-val):
+        if abs(crt.lt.val - val) > abs(temp-val):
           pass
         else:
-          temp = lmax
+          temp = crt.lt.val
         prev = crt
-        crt = crt.rt
+        crt = crt.lt
 
   def rem(self,val):
     '''removes the node with the value and reorders tree as required'''
@@ -153,7 +143,7 @@ class tree():
             prev.rt = crt.lt
           elif flag == 'l':
             prev.lt = crt.lt
-          return
+          return str(val)+' removed'
         #right-up shift
         elif crt.lt == None:
           if flag == 'h':
@@ -162,7 +152,7 @@ class tree():
             prev.rt = crt.rt
           elif flag == 'l':
             prev.lt = crt.rt
-          return
+          return str(val)+' removed'
         #successor shift
         else:
           succ, succprev, succflag = crt.succ(prev)
@@ -180,7 +170,7 @@ class tree():
           elif succflag == 'l':
             succprev.lt = succ.rt
           succ.rt = crt.rt
-          return
+          return str(val)+' removed'
 
       #transverse tree for value
       elif val > crt.val:
@@ -196,8 +186,8 @@ class tree():
         prev = crt
         crt = crt.lt
         flag = 'l'
-
-
+        
+        
 btree = tree()
 while True:
   print('\n \n press a to add, s to search, rs to range search, r to remove, q to quit. ')
@@ -214,7 +204,7 @@ while True:
     btree.head.findall(a,b,l)
     print(l)
   elif f == 'r':
-    btree.rem(int(input('enter the number to remove: ')))
+    print(btree.rem(int(input('enter the number to remove: '))))
   elif f == 'p':
     print(btree.head)
   elif f == 'q':
